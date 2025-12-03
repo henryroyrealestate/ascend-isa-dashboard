@@ -530,8 +530,12 @@ async function loadNextUp() {
         `Next Appointment: ${data["Appointment"]}    |    Next Homebot: ${data["Homebot"]}`;
 }
 
-loadNextUp();
-setInterval(loadNextUp, 15000);
+async function refreshNextUp() {
+    await loadNextUp(); // instant update
+}
+
+refreshNextUp();
+setInterval(refreshNextUp, 15000);
 
 
 /* ----------------------------------------------------
@@ -557,7 +561,7 @@ async function submitAssignment() {
         document.getElementById("assignPhone").value = "";
         document.getElementById("assignAddress").value = "";
         document.getElementById("assignNotes").value = "";
-        loadNextUp();
+        await loadNextUp();
     }
 }
 
