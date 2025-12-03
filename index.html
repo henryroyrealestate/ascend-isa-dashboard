@@ -38,7 +38,7 @@
         margin-bottom: 10px;
     }
 
-    /* WORK HUB CARD */
+    /* WORK HUB */
     .workhub {
         max-width: 900px;
         margin: 20px auto 40px;
@@ -350,6 +350,7 @@
         <div class="progress-bar-fill" id="weeklyProgress"></div>
     </div>
 </div>
+
 <!-- AGENT CARDS -->
 <div class="agent-container">
     <div class="agent-card">
@@ -429,7 +430,6 @@
     </div>
 </div>
 
-
 <script>
 /* ----------------------------------------------------
    CONFIG
@@ -444,7 +444,6 @@ async function refreshClock() {
         const res = await fetch(API_URL);
         const data = await res.json();
 
-        // HOURS
         document.getElementById("hoursToday").innerText =
             "Today's Hours: " + (data.todayHours || 0).toFixed(2);
 
@@ -454,7 +453,6 @@ async function refreshClock() {
         document.getElementById("remainingHours").innerText =
             "Remaining This Week: " + (data.remainingHours || 0).toFixed(2) + " hrs";
 
-        // PROGRESS BAR
         let percent = Math.min((data.weekHours / 20) * 100, 100);
         const bar = document.getElementById("weeklyProgress");
         bar.style.width = percent + "%";
@@ -464,7 +462,6 @@ async function refreshClock() {
         else if (percent < 90) bar.classList.add("yellow");
         else bar.classList.add("red");
 
-        // CLOCK STATUS
         const statusBanner = document.getElementById("statusBanner");
         const clockedTime = document.getElementById("clockedTime");
         const errorBanner = document.getElementById("errorBanner");
@@ -531,7 +528,7 @@ async function loadNextUp() {
 }
 
 async function refreshNextUp() {
-    await loadNextUp(); // instant update
+    await loadNextUp();
 }
 
 refreshNextUp();
@@ -539,7 +536,7 @@ setInterval(refreshNextUp, 15000);
 
 
 /* ----------------------------------------------------
-   ASSIGNMENT SUBMISSION
+   ASSIGNMENT SUBMISSION (CORRECTED)
 ---------------------------------------------------- */
 async function submitAssignment() {
     const category = document.getElementById("assignType").value;
@@ -549,34 +546,34 @@ async function submitAssignment() {
     const address = document.getElementById("assignAddress").value;
     const notes = document.getElementById("assignNotes").value;
 
-    const url = `${API_URL}?action=assign&category=${encodeURIComponent(category)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}&notes=${encodeURIComponent(notes)}`;
+    const url =
+        `${API_URL}?action=assign&category=${encodeURIComponent(category)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}&notes=${encodeURIComponent(notes)}`;
 
     const res = await fetch(url, { method: "POST" });
     const data = await res.json();
 
     if (data.status === "success") {
         alert(`Assigned to ${data.assignedTo}`);
+
         document.getElementById("assignName").value = "";
         document.getElementById("assignEmail").value = "";
         document.getElementById("assignPhone").value = "";
         document.getElementById("assignAddress").value = "";
         document.getElementById("assignNotes").value = "";
+
         await loadNextUp();
     }
 }
 
 
 /* ----------------------------------------------------
-   SCRIPT GENERATOR (same as working version)
+   SCRIPT GENERATOR
 ---------------------------------------------------- */
 function generateColdHooks() {
     const hooks = [
         "Hey, this is Kevin with Ascend Realty. Quick question, would you be open to hearing how much buyers are paying in your neighborhood lately?",
         "Kevin here with Ascend Realty. Do you follow the real estate activity around your street at all?",
-        "This is Kevin at Ascend Realty. If there was a strong shift in demand on your block, would that be something you’d want a heads-up on?",
-        "Kevin with Ascend Realty checking in. Are you familiar with what your home would realistically attract today?",
-        "If your equity jumped more than you expected, would you want to know? This is Kevin with Ascend Realty.",
-        "This is Kevin over at Ascend Realty. When’s the last time someone gave you a true local update, not the Zillow nonsense?"
+        "This is Kevin at Ascend Realty. If there was a strong shift in demand on your block, would that be something you’d want a heads-up on?"
     ];
 
     document.getElementById("output").textContent =
@@ -586,8 +583,7 @@ function generateColdHooks() {
 function generateWarmHooks() {
     const warm = [
         "Hey, this is Kevin with Ascend Realty. I saw you checked out some homes on our site and wanted to see what caught your eye.",
-        "Kevin here at Ascend Realty. Were you browsing casually or actively looking for something in the next few months?",
-        "Saw you saved a property recently. What stood out about it to you?"
+        "Kevin here at Ascend Realty. Were you browsing casually or actively looking for something in the next few months?"
     ];
 
     document.getElementById("output").textContent =
