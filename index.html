@@ -5,72 +5,334 @@
 <title>Ascend ISA Dashboard</title>
 
 <style>
-    body { margin:0; font-family:Inter,sans-serif; background:#f4f7fb; color:#1e2a36; }
-    .header { text-align:center; padding:30px 20px 15px; background:linear-gradient(180deg,#e7eef7,#f5f8fc); border-bottom:1px solid #d9e1ec; }
-    .logo { width:260px; margin-top:10px; margin-bottom:5px; }
-    h1 { font-size:40px; margin:0; font-weight:700; color:#1f3549; }
-    .subtext{ font-size:17px; color:#526578; margin-bottom:5px; }
+    body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: #f4f7fb;
+        color: #1e2a36;
+    }
 
-    .workhub{ max-width:900px; margin:20px auto 40px; background:white; padding:30px; border-radius:20px; box-shadow:0 10px 28px rgba(0,0,0,0.12); border:1px solid #e3e8ef;}
-    .status-banner{ display:none; background:#15384a; color:white; padding:12px; border-radius:10px; text-align:center; font-size:17px; font-weight:600; margin-bottom:12px;}
-    .error-banner{ display:none; background:#b42d2d; color:white; padding:12px; border-radius:10px; text-align:center; font-size:16px; font-weight:600; margin-bottom:12px;}
-    .clocked-time{ display:none; text-align:center; font-size:15px; color:#30475e; margin-bottom:20px; font-weight:600;}
+    .header {
+        text-align: center;
+        padding: 30px 20px 20px;
+        background: linear-gradient(180deg, #e7eef7 0%, #f5f8fc 100%);
+        border-bottom: 1px solid #d9e1ec;
+    }
 
-    .clock-btns{ display:flex; gap:20px; justify-content:center; margin-bottom:20px;}
-    .clock-btn{ flex:1; padding:14px; border:none; border-radius:10px; color:white; font-size:16px; font-weight:600; cursor:pointer;}
-    .clock-in{ background:#15384a;} .clock-in:hover{background:#1f4d67;}
-    .clock-out{ background:#b02a2a;} .clock-out:hover{background:#c03a3a;}
-    .disabled{ opacity:0.35; cursor:not-allowed;}
+    .logo {
+        width: 260px;
+        margin-bottom: 5px;
+        margin-top: 10px;
+    }
 
-    .stats-box{ text-align:center; font-size:17px; font-weight:600; color:#2f3f50;}
-    .secondary{ font-size:14px; color:#556475; margin-top:5px;}
+    h1 {
+        font-size: 40px;
+        margin: 5px 0 5px;
+        font-weight: 700;
+        color: #1f3549;
+    }
 
-    .progress-bar-bg{ width:100%; background:#e6edf5; height:18px; border-radius:10px; margin-top:15px; overflow:hidden;}
-    .progress-bar-fill{ height:100%; width:0%; transition:width .4s ease;}
-    .green{background:#28a745;} .yellow{background:#ffc107;} .red{background:#dc3545;}
+    .subtext {
+        font-size: 17px;
+        color: #526578;
+        margin-bottom: 10px;
+    }
 
-    .agent-container{ display:flex; justify-content:center; gap:30px; margin-bottom:50px; padding:0 20px; flex-wrap:wrap;}
-    .agent-card{ width:290px; background:white; padding:26px; border-radius:18px; box-shadow:0 8px 22px rgba(0,0,0,0.08); text-align:center;}
-    .agent-card h2{ font-size:22px; margin-top:0; }
+    /* WORK HUB CARD */
+    .workhub {
+        max-width: 900px;
+        margin: 20px auto 40px;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+        border: 1px solid #e3e8ef;
+    }
 
-    .btn{ display:block; width:100%; margin:10px auto; padding:12px; background:#2b4a5a; color:white; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer;}
-    .btn:hover{ background:#3b6173;}
+    .status-banner {
+        display: none;
+        background: #15384a;
+        color: white;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
 
-    .assignment-card{ max-width:900px; margin:0 auto 50px; background:white; padding:30px; border-radius:18px; box-shadow:0 8px 22px rgba(0,0,0,0.10);}
-    .assignment-card h2{ text-align:center; font-size:26px; font-weight:700; color:#15384a; margin-bottom:10px;}
+    .error-banner {
+        display: none;
+        background: #b42d2d;
+        color: white;
+        padding: 12px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
 
-    .next-up-box{ background:#e9f1f6; padding:14px; border-left:6px solid #15384a; border-radius:10px; margin-bottom:20px; font-size:17px; font-weight:600; }
+    .clocked-time {
+        display: none;
+        text-align: center;
+        font-size: 15px;
+        color: #30475e;
+        margin-bottom: 20px;
+        font-weight: 600;
+    }
 
-    .assignment-form{ display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    .clock-btns {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .clock-btn {
+        flex: 1;
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+        color: white;
+    }
+
+    .clock-in {
+        background: #15384a;
+    }
+    .clock-in:hover { background: #1f4d67; }
+
+    .clock-out {
+        background: #b02a2a;
+    }
+    .clock-out:hover { background: #c03a3a; }
+
+    .disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+    }
+
+    .stats-box {
+        text-align: center;
+        font-size: 17px;
+        font-weight: 600;
+        margin-top: 10px;
+        color: #2f3f50;
+    }
+
+    .secondary {
+        font-size: 14px;
+        color: #556475;
+        margin-top: 5px;
+        font-weight: 500;
+    }
+
+    .progress-bar-bg {
+        width: 100%;
+        background: #e6edf5;
+        height: 18px;
+        border-radius: 10px;
+        margin-top: 15px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        transition: width 0.4s ease;
+    }
+
+    .green { background: #28a745; }
+    .yellow { background: #ffc107; }
+    .red { background: #dc3545; }
+
+    /* Agent cards */
+    .agent-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 0 20px;
+        margin-bottom: 50px;
+        flex-wrap: wrap;
+    }
+
+    .agent-card {
+        background: white;
+        border-radius: 18px;
+        width: 290px;
+        padding: 26px;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .agent-card h2 {
+        margin-top: 0;
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .btn {
+        display: block;
+        margin: 10px auto;
+        background: #2b4a5a;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .btn:hover { background: #3b6173; }
+
+    /* Assignment Logger */
+    .assignment-card {
+        max-width: 900px;
+        margin: 0 auto 50px;
+        background: white;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.10);
+    }
+
+    .assignment-card h2 {
+        font-size: 26px;
+        margin-bottom: 10px;
+        font-weight: 700;
+        text-align: center;
+        color: #15384a;
+    }
+
+    .next-up-box {
+        background: #e9f1f6;
+        padding: 14px;
+        border-left: 6px solid #15384a;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 17px;
+        font-weight: 600;
+        color: #1b2e41;
+    }
+
+    .assignment-form {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        margin-top: 15px;
+    }
+
     .assignment-form input,
     .assignment-form textarea,
-    .assignment-form select{
-        padding:12px; border-radius:10px; border:1px solid #c9d3df; font-size:15px;
+    .assignment-form select {
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #c9d3df;
+        font-size: 15px;
     }
-    .assignment-form textarea{ grid-column:span 2; min-height:80px;}
-    .assign-btn{ grid-column:span 2; padding:14px; font-size:17px; font-weight:700; background:#15384a; color:white; border:none; border-radius:12px; cursor:pointer;}
-    .assign-btn:hover{ background:#1f4d67;}
 
-    .generator-card{ max-width:900px; margin:0 auto 60px; background:white; padding:30px; border-radius:14px; box-shadow:0 4px 20px rgba(0,0,0,0.08);}
-    .generator-card h2{text-align:center; font-size:26px; font-weight:700;}
-    .generator-row{ display:flex; flex-wrap:wrap; gap:20px; justify-content:center; margin-bottom:30px;}
-    .gen-btn{ background:#1d4e89; border:none; color:white; padding:12px 22px; font-size:16px; border-radius:10px; cursor:pointer;}
-    .gen-btn:hover{ background:#163d6b;}
-    .output-box{ background:#f8fafc; border-left:5px solid #1d4e89; padding:20px; border-radius:12px; min-height:150px; white-space:pre-wrap; }
+    .assignment-form textarea {
+        grid-column: span 2;
+        min-height: 80px;
+    }
+
+    .assign-btn {
+        grid-column: span 2;
+        padding: 14px;
+        font-size: 17px;
+        background: #15384a;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 700;
+    }
+
+    .assign-btn:hover {
+        background: #1f4d67;
+    }
+
+    /* Script Generator */
+    .generator-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 14px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        margin: 0 auto 60px;
+        max-width: 900px;
+    }
+
+    .generator-card h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 26px;
+        font-weight: 700;
+        color: #1d2d44;
+    }
+
+    .generator-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 30px;
+    }
+
+    .gen-btn {
+        background-color: #1d4e89;
+        border: none;
+        color: white;
+        padding: 12px 22px;
+        font-size: 16px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.15s;
+    }
+
+    .gen-btn:hover {
+        background-color: #163d6b;
+    }
+
+    select {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .output-box {
+        background: #f8fafc;
+        border-left: 5px solid #1d4e89;
+        padding: 20px;
+        border-radius: 12px;
+        min-height: 150px;
+        white-space: pre-wrap;
+        font-size: 15px;
+        line-height: 1.5;
+    }
 </style>
-
 </head>
+
 <body>
 
+<!-- HEADER -->
 <div class="header">
     <img src="Ascend_Horiz_Logo.png" class="logo">
     <h1>Hi, Kevin</h1>
     <div class="subtext">Every dial is a doorway to an opportunity.</div>
 </div>
 
+<!-- WORK HUB -->
 <div class="workhub">
+
     <div id="statusBanner" class="status-banner">YOU ARE CLOCKED IN</div>
     <div id="errorBanner" class="error-banner"></div>
+
     <div id="clockedTime" class="clocked-time"></div>
 
     <div class="clock-btns">
@@ -85,11 +347,11 @@
     </div>
 
     <div class="progress-bar-bg">
-        <div id="weeklyProgress" class="progress-bar-fill"></div>
+        <div class="progress-bar-fill" id="weeklyProgress"></div>
     </div>
 </div>
 
-<!-- AGENTS -->
+<!-- AGENT CARDS -->
 <div class="agent-container">
     <div class="agent-card">
         <h2>Mike Frybarger</h2>
@@ -99,14 +361,22 @@
 
     <div class="agent-card">
         <h2>Henry Ulrich</h2>
-        <a href="https://calendly.com/henryroy" target="_blank"><button class="btn">Schedule w/ Henry</button></a>
-        <a href="https://hmbt.co/fUNkbh" target="_blank"><button class="btn">Homebot Seller</button></a>
+        <a href="https://calendly.com/henryroy" target="_blank">
+            <button class="btn">Schedule w/ Henry</button>
+        </a>
+        <a href="https://hmbt.co/fUNkbh" target="_blank">
+            <button class="btn">Homebot Seller</button>
+        </a>
     </div>
 
     <div class="agent-card">
         <h2>Megan Dickerson</h2>
-        <a href="https://calendly.com/megandickerson-realestate" target="_blank"><button class="btn">Schedule w/ Megan</button></a>
-        <a href="https://get.homebot.ai/?id=14257442-1eec-49ec-b010-21fb01435f4b" target="_blank"><button class="btn">Homebot Seller</button></a>
+        <a href="https://calendly.com/megandickerson-realestate" target="_blank">
+            <button class="btn">Schedule w/ Megan</button>
+        </a>
+        <a href="https://get.homebot.ai/?id=14257442-1eec-49ec-b010-21fb01435f4b" target="_blank">
+            <button class="btn">Homebot Seller</button>
+        </a>
     </div>
 </div>
 
@@ -114,7 +384,7 @@
 <div class="assignment-card">
     <h2>Appointment + Homebot Assignment</h2>
 
-    <div id="nextUpBox" class="next-up-box">Loading...</div>
+    <div id="nextUpBox" class="next-up-box">Loading next agent...</div>
 
     <div class="assignment-form">
         <select id="assignType">
@@ -126,6 +396,7 @@
         <input id="assignEmail" placeholder="Client Email">
         <input id="assignPhone" placeholder="Client Phone">
         <input id="assignAddress" placeholder="Client Address">
+
         <textarea id="assignNotes" placeholder="Notes..."></textarea>
 
         <button class="assign-btn" onclick="submitAssignment()">Submit Assignment</button>
@@ -141,126 +412,197 @@
         <button class="gen-btn" onclick="generateWarmHooks()">Warm Buyer Follow-Up</button>
 
         <select id="objectionSelect">
-            <option value="notSelling">“We're not selling.”</option>
-            <option value="haveAgent">“We have an agent.”</option>
-            <option value="spring">“Waiting until spring.”</option>
+            <option value="notSelling">“We’re not selling.”</option>
+            <option value="haveAgent">“We already have an agent.”</option>
+            <option value="spring">“We’re waiting until spring.”</option>
             <option value="justLooking">“Just browsing.”</option>
             <option value="notInterested">“Not interested.”</option>
             <option value="stopCalling">“Stop calling.”</option>
-            <option value="rental">“Keeping it as a rental.”</option>
-            <option value="generic">General</option>
+            <option value="rental">“We’re keeping it as a rental.”</option>
+            <option value="generic">General objections</option>
         </select>
 
         <button class="gen-btn" onclick="generateObjections()">Handle Objection</button>
     </div>
 
-    <div id="output" class="output-box">Click a button…</div>
+    <div id="output" class="output-box">
+        Click a button to generate scripts…
+    </div>
 </div>
 
+
 <script>
-/* BACKEND URL */
-const API_URL = "https://script.google.com/macros/s/AKfycbyh3zwM_Aph-DEgwxBEGrMZow5SB3jXYrRGg3zQfWP4IA71tub1OGffukrtNL-OBZD5/exec";
+/* ----------------------------------------------------
+   CONFIG
+---------------------------------------------------- */
+const API_URL = "https://script.google.com/macros/s/AKfycbxsGdGcLz39tAzfnR34OGq05W30HSxi8VS6W4ZrnkAWUJP7gxS1jgELMepbLf-6yaNI/exec";
 
-/* ---------------- CLOCK ---------------- */
-async function refreshClock(){
-    const res = await fetch(API_URL);
-    const data = await res.json();
+/* ----------------------------------------------------
+   CLOCK SYSTEM
+---------------------------------------------------- */
+async function refreshClock() {
+    try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
 
-    document.getElementById("hoursToday").innerText = "Today's Hours: " + (data.todayHours||0).toFixed(2);
-    document.getElementById("weekHours").innerText = "This Week: " + (data.weekHours||0).toFixed(2) + " / 20 hrs";
-    document.getElementById("remainingHours").innerText = "Remaining This Week: " + (data.remainingHours||0).toFixed(2);
+        document.getElementById("hoursToday").innerText =
+            "Today's Hours: " + (data.todayHours || 0).toFixed(2);
 
-    let pct = Math.min((data.weekHours/20)*100,100);
-    const bar = document.getElementById("weeklyProgress");
-    bar.style.width = pct+"%";
-    bar.className = "progress-bar-fill " + (pct<50?"green":pct<90?"yellow":"red");
+        document.getElementById("weekHours").innerText =
+            "This Week: " + (data.weekHours || 0).toFixed(2) + " / 20 hrs";
 
-    if(data.isClockedIn){
-        document.getElementById("statusBanner").style.display="block";
-        document.getElementById("clockOutBtn").disabled=false;
-        document.getElementById("clockOutBtn").classList.remove("disabled");
-        document.getElementById("clockInBtn").disabled=true;
-        document.getElementById("clockInBtn").classList.add("disabled");
-    } else {
-        document.getElementById("statusBanner").style.display="none";
-        document.getElementById("clockOutBtn").disabled=true;
-        document.getElementById("clockOutBtn").classList.add("disabled");
-        document.getElementById("clockInBtn").disabled=false;
-        document.getElementById("clockInBtn").classList.remove("disabled");
+        document.getElementById("remainingHours").innerText =
+            "Remaining This Week: " + (data.remainingHours || 0).toFixed(2) + " hrs";
+
+        let percent = Math.min((data.weekHours / 20) * 100, 100);
+        const bar = document.getElementById("weeklyProgress");
+        bar.style.width = percent + "%";
+
+        bar.classList.remove("green", "yellow", "red");
+        if (percent < 50) bar.classList.add("green");
+        else if (percent < 90) bar.classList.add("yellow");
+        else bar.classList.add("red");
+
+        const statusBanner = document.getElementById("statusBanner");
+        const clockedTime = document.getElementById("clockedTime");
+        const errorBanner = document.getElementById("errorBanner");
+
+        errorBanner.style.display = "none";
+
+        if (data.isClockedIn) {
+            statusBanner.style.display = "block";
+            clockedTime.style.display = "block";
+            clockedTime.innerText = "Clocked in";
+
+            document.getElementById("clockInBtn").disabled = true;
+            document.getElementById("clockInBtn").classList.add("disabled");
+
+            document.getElementById("clockOutBtn").disabled = false;
+            document.getElementById("clockOutBtn").classList.remove("disabled");
+        } else {
+            statusBanner.style.display = "none";
+            clockedTime.style.display = "none";
+
+            document.getElementById("clockOutBtn").disabled = true;
+            document.getElementById("clockOutBtn").classList.add("disabled");
+
+            document.getElementById("clockInBtn").disabled = false;
+            document.getElementById("clockInBtn").classList.remove("disabled");
+        }
+
+    } catch (err) {
+        console.error("Clock refresh error:", err);
     }
 }
 
-document.getElementById("clockInBtn").onclick=async()=>{
-    await fetch(API_URL+"?action=clock&event=Clock+In",{method:"POST"});
+document.getElementById("clockInBtn").onclick = async () => {
+    const res = await fetch(API_URL + "?action=clock&event=Clock+In", { method: "POST" });
+    const data = await res.json();
+
+    if (data.status === "error") {
+        const banner = document.getElementById("errorBanner");
+        banner.innerText = data.message;
+        banner.style.display = "block";
+    }
+
     refreshClock();
 };
-document.getElementById("clockOutBtn").onclick=async()=>{
-    await fetch(API_URL+"?action=clock&event=Clock+Out",{method:"POST"});
+
+document.getElementById("clockOutBtn").onclick = async () => {
+    await fetch(API_URL + "?action=clock&event=Clock+Out", { method: "POST" });
     refreshClock();
 };
 
 refreshClock();
-setInterval(refreshClock,15000);
+setInterval(refreshClock, 15000);
 
-/* ---------------- ROUND ROBIN ---------------- */
-async function loadNextUp(){
-    const res = await fetch(API_URL+"?action=roundrobin",{method:"POST"});
+
+/* ----------------------------------------------------
+   ROUND ROBIN FETCH
+---------------------------------------------------- */
+async function loadNextUp() {
+    const res = await fetch(API_URL + "?action=roundrobin");
     const data = await res.json();
-    document.getElementById("nextUpBox").innerText =
-        `Next Appointment: ${data.Appointment} | Next Homebot: ${data.Homebot}`;
-}
-loadNextUp();
-setInterval(loadNextUp,15000);
 
-/* ---------------- ASSIGN ---------------- */
-async function submitAssignment(){
-    const type = document.getElementById("assignType").value;
+    document.getElementById("nextUpBox").innerText =
+        `Next Appointment: ${data.Appointment}    |    Next Homebot: ${data.Homebot}`;
+}
+
+async function refreshNextUp() {
+    await loadNextUp();
+}
+
+refreshNextUp();
+setInterval(refreshNextUp, 15000);
+
+
+/* ----------------------------------------------------
+   ASSIGNMENT SUBMISSION
+---------------------------------------------------- */
+async function submitAssignment() {
+    const category = document.getElementById("assignType").value;
     const name = document.getElementById("assignName").value;
     const email = document.getElementById("assignEmail").value;
     const phone = document.getElementById("assignPhone").value;
-    const addr = document.getElementById("assignAddress").value;
+    const address = document.getElementById("assignAddress").value;
     const notes = document.getElementById("assignNotes").value;
 
-    const url = `${API_URL}?action=assign&category=${type}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(addr)}&notes=${encodeURIComponent(notes)}`;
+    const url = `${API_URL}?action=assign&category=${encodeURIComponent(category)}&name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&address=${encodeURIComponent(address)}&notes=${encodeURIComponent(notes)}`;
 
-    const res = await fetch(url,{method:"POST"});
+    const res = await fetch(url, { method: "POST" });
     const data = await res.json();
 
-    alert("Assigned to " + data.assignedTo);
-
-    document.getElementById("assignName").value="";
-    document.getElementById("assignEmail").value="";
-    document.getElementById("assignPhone").value="";
-    document.getElementById("assignAddress").value="";
-    document.getElementById("assignNotes").value="";
-
-    loadNextUp();
+    if (data.status === "success") {
+        alert(`Assigned to ${data.assignedTo}`);
+        document.getElementById("assignName").value = "";
+        document.getElementById("assignEmail").value = "";
+        document.getElementById("assignPhone").value = "";
+        document.getElementById("assignAddress").value = "";
+        document.getElementById("assignNotes").value = "";
+        await loadNextUp();
+    }
 }
 
-/* SCRIPT GENERATOR ( unchanged ) */
-function generateColdHooks(){
+
+/* ----------------------------------------------------
+   SCRIPT GENERATOR (kept short for readability)
+---------------------------------------------------- */
+function generateColdHooks() {
+    const hooks = [
+        "Hey, this is Kevin with Ascend Realty. Quick question, would you be open to hearing how much buyers are paying in your neighborhood lately?",
+        "Kevin here with Ascend Realty. Do you follow the real estate activity around your street at all?",
+        "This is Kevin at Ascend Realty. If there was a strong shift in demand on your block, would that be something you’d want a heads-up on?"
+    ];
+
     document.getElementById("output").textContent =
-        ["Hey this is Kevin with Ascend Realty…",
-         "Do you follow the activity in your neighborhood?",
-         "If prices jumped, would you want a heads-up?"]
-         .map(x=>"• "+x).join("\n\n");
+        hooks.map(h => "• " + h).join("\n\n");
 }
-function generateWarmHooks(){
+
+function generateWarmHooks() {
+    const warm = [
+        "Hey, this is Kevin with Ascend Realty. I saw you checked out some homes on our site and wanted to see what caught your eye.",
+        "Kevin here at Ascend Realty. Were you browsing casually or actively looking for something in the next few months?",
+        "Saw you saved a property recently. What stood out about it to you?"
+    ];
+
     document.getElementById("output").textContent =
-        ["Hey I saw you browsing on our site…",
-         "Are you casually looking or planning a move?",
-         "Anything specific you're hoping to find?"]
-        .map(x=>"• "+x).join("\n\n");
+        warm.map(h => "• " + h).join("\n\n");
 }
-function generateObjections(){
-    const o=document.getElementById("objectionSelect").value;
-    const r={
-        notSelling:["Totally fair, most aren’t selling right now…","If the market shifted in your favor would you want a quick update?"],
-        haveAgent:["Awesome that you already have someone…","When's the last time they updated your home's value?"],
-        rental:["Nice, rentals do well here…","How long do you plan to hold it?"],
-        generic:["Totally get it…","When’s the last time you checked your equity?"]
+
+function generateObjections() {
+    const type = document.getElementById("objectionSelect").value;
+
+    const responses = {
+        notSelling: [
+            "Totally fair. Most people I talk to aren’t selling right now. I’m just giving quick market updates so you always know where you stand."
+        ],
+        haveAgent: [
+            "That’s awesome, sticking with someone you trust matters. When did they last update you on your home value?"
+        ]
     };
-    document.getElementById("output").textContent = r[o].map(x=>"• "+x).join("\n\n");
+
+    document.getElementById("output").textContent =
+        responses[type].map(r => "• " + r).join("\n\n");
 }
 </script>
 
