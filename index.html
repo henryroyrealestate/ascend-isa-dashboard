@@ -253,9 +253,7 @@
         font-weight: 700;
     }
 
-    .assign-btn:hover {
-        background: #1f4d67;
-    }
+    .assign-btn:hover { background: #1f4d67; }
 
     /* Script Generator */
     .generator-card {
@@ -294,9 +292,7 @@
         transition: 0.15s;
     }
 
-    .gen-btn:hover {
-        background-color: #163d6b;
-    }
+    .gen-btn:hover { background-color: #163d6b; }
 
     select {
         padding: 10px;
@@ -439,10 +435,11 @@ const API_URL = "https://script.google.com/macros/s/AKfycbxsGdGcLz39tAzfnR34OGq0
 
 /* ----------------------------------------------------
    CLOCK SYSTEM
+   MUST USE ?action=clockStatus
 ---------------------------------------------------- */
 async function refreshClock() {
     try {
-        const res = await fetch(API_URL);
+        const res = await fetch(API_URL + "?action=clockStatus");
         const data = await res.json();
 
         document.getElementById("hoursToday").innerText =
@@ -528,9 +525,7 @@ async function loadNextUp() {
         `Next Appointment: ${data.Appointment}    |    Next Homebot: ${data.Homebot}`;
 }
 
-async function refreshNextUp() {
-    await loadNextUp();
-}
+async function refreshNextUp() { await loadNextUp(); }
 
 refreshNextUp();
 setInterval(refreshNextUp, 15000);
@@ -565,15 +560,17 @@ async function submitAssignment() {
 
 
 /* ----------------------------------------------------
-   SCRIPT GENERATOR (kept short for readability)
+   SCRIPT GENERATOR (unchanged)
 ---------------------------------------------------- */
 function generateColdHooks() {
     const hooks = [
         "Hey, this is Kevin with Ascend Realty. Quick question, would you be open to hearing how much buyers are paying in your neighborhood lately?",
         "Kevin here with Ascend Realty. Do you follow the real estate activity around your street at all?",
-        "This is Kevin at Ascend Realty. If there was a strong shift in demand on your block, would that be something you’d want a heads-up on?"
+        "This is Kevin at Ascend Realty. If there was a strong shift in demand on your block, would that be something you’d want a heads-up on?",
+        "Kevin with Ascend Realty checking in. Are you familiar with what your home would realistically attract today?",
+        "If your equity jumped more than you expected, would you want to know? This is Kevin with Ascend Realty.",
+        "This is Kevin over at Ascend Realty. When’s the last time someone gave you a true local update, not the Zillow nonsense?"
     ];
-
     document.getElementById("output").textContent =
         hooks.map(h => "• " + h).join("\n\n");
 }
@@ -584,7 +581,6 @@ function generateWarmHooks() {
         "Kevin here at Ascend Realty. Were you browsing casually or actively looking for something in the next few months?",
         "Saw you saved a property recently. What stood out about it to you?"
     ];
-
     document.getElementById("output").textContent =
         warm.map(h => "• " + h).join("\n\n");
 }
@@ -594,7 +590,8 @@ function generateObjections() {
 
     const responses = {
         notSelling: [
-            "Totally fair. Most people I talk to aren’t selling right now. I’m just giving quick market updates so you always know where you stand."
+            "Totally fair. Most people I talk to aren’t selling right now. I’m just giving quick market updates so you always know where you stand.",
+            "No problem at all. If the market shifted in your favor, would a quick update still be useful?"
         ],
         haveAgent: [
             "That’s awesome, sticking with someone you trust matters. When did they last update you on your home value?"
