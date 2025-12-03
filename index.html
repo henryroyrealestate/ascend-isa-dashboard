@@ -14,26 +14,26 @@
 
     .header {
         text-align: center;
-        padding: 60px 20px 50px;
+        padding: 40px 20px 30px;
         background: linear-gradient(180deg, #e7eef7 0%, #f5f8fc 100%);
         border-bottom: 1px solid #d9e1ec;
     }
 
     .logo {
         width: 240px;
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     h1 {
         font-size: 42px;
-        margin: 10px 0 5px;
+        margin: 5px 0 5px;
         font-weight: 700;
     }
 
     .subtext {
         font-size: 18px;
         color: #526578;
-        margin-bottom: 40px;
+        margin-bottom: 20px;
     }
 
     /* -----------------------------------------
@@ -41,7 +41,7 @@
     ----------------------------------------- */
     .workhub {
         max-width: 900px;
-        margin: -20px auto 40px;
+        margin: -10px auto 40px;
         background: white;
         padding: 30px;
         border-radius: 20px;
@@ -142,7 +142,6 @@
         transition: width 0.4s ease;
     }
 
-    /* Color thresholds */
     .green { background: #28a745; }
     .yellow { background: #ffc107; }
     .red { background: #dc3545; }
@@ -183,6 +182,7 @@
         gap: 30px;
         padding: 0 20px;
         margin-bottom: 50px;
+        flex-wrap: wrap;
     }
 
     .agent-card {
@@ -212,47 +212,70 @@
         font-size: 15px;
         cursor: pointer;
         font-weight: 600;
-        transition: 0.2s;
     }
 
     .btn:hover { background: #3b6173; }
 
     /* -----------------------------------------
-       HOOK GENERATOR
+       ISA SCRIPT GENERATOR
     ----------------------------------------- */
-    .generator {
-        background: white;
-        max-width: 900px;
-        margin: 0 auto 60px;
+    .generator-card {
+        background: #ffffff;
         padding: 30px;
-        border-radius: 18px;
-        box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+        border-radius: 14px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        margin: 0 auto 60px;
+        max-width: 900px;
     }
 
-    .generator h3 {
-        font-size: 24px;
-        margin-bottom: 10px;
+    .generator-card h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        font-size: 26px;
+        font-weight: 700;
+        color: #1d2d44;
     }
 
-    #hookText {
-        font-size: 18px;
-        margin: 20px 0;
-        font-weight: 500;
-        color: #1e2a36;
+    .generator-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 30px;
     }
 
     .gen-btn {
-        background: #15384a;
-        color: white;
+        background-color: #1d4e89;
         border: none;
-        padding: 10px 18px;
-        border-radius: 8px;
+        color: white;
+        padding: 12px 22px;
+        font-size: 16px;
+        border-radius: 10px;
         cursor: pointer;
-        font-weight: 600;
-        transition: 0.2s;
+        transition: 0.15s;
     }
 
-    .gen-btn:hover { background: #1f4d67; }
+    .gen-btn:hover {
+        background-color: #163d6b;
+    }
+
+    select {
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 16px;
+    }
+
+    .output-box {
+        background: #f8fafc;
+        border-left: 5px solid #1d4e89;
+        padding: 20px;
+        border-radius: 12px;
+        min-height: 150px;
+        white-space: pre-wrap;
+        font-size: 15px;
+        line-height: 1.5;
+    }
 </style>
 </head>
 
@@ -304,39 +327,176 @@
 
     <div class="agent-card">
         <h2>Henry Ulrich</h2>
-        <a href="https://calendly.com/henryroy" target="_blank"><button class="btn">Schedule w/ Henry</button></a>
-        <a href="https://hmbt.co/fUNkbh" target="_blank"><button class="btn">Homebot Seller</button></a>
+        <a href="https://calendly.com/henryroy" target="_blank">
+            <button class="btn">Schedule w/ Henry</button>
+        </a>
+        <a href="https://hmbt.co/fUNkbh" target="_blank">
+            <button class="btn">Homebot Seller</button>
+        </a>
     </div>
 
     <div class="agent-card">
         <h2>Megan Dickerson</h2>
-        <a href="https://calendly.com/megandickerson-realestate" target="_blank"><button class="btn">Schedule w/ Megan</button></a>
-        <a href="https://get.homebot.ai/?id=14257442-1eec-49ec-b010-21fb01435f4b" target="_blank"><button class="btn">Homebot Seller</button></a>
+        <a href="https://calendly.com/megandickerson-realestate" target="_blank">
+            <button class="btn">Schedule w/ Megan</button></a>
+        <a href="https://get.homebot.ai/?id=14257442-1eec-49ec-b010-21fb01435f4b" target="_blank">
+            <button class="btn">Homebot Seller</button></a>
     </div>
 </div>
 
-<!-- HOOK GENERATOR -->
-<div class="generator">
-    <h3>Cold Call Hook Generator</h3>
-    <div id="hookText">Click the button to generate a hook!</div>
-    <button class="gen-btn" onclick="generateHook()">New Hook</button>
+<!-- ===================================== -->
+<!--        AI SCRIPT GENERATOR AREA       -->
+<!-- ===================================== -->
+
+<div class="generator-card">
+    <h2>ISA Script Generator</h2>
+
+    <div class="generator-row">
+        <button class="gen-btn" onclick="generateColdHooks()">Cold Call Intros</button>
+        <button class="gen-btn" onclick="generateWarmHooks()">Warm Buyer Follow-Up</button>
+
+        <select id="objectionSelect">
+            <option value="notSelling">“We’re not selling.”</option>
+            <option value="haveAgent">“We already have an agent.”</option>
+            <option value="spring">“We’re waiting until spring.”</option>
+            <option value="justLooking">“Just browsing.”</option>
+            <option value="notInterested">“Not interested.”</option>
+            <option value="stopCalling">“Stop calling.”</option>
+            <option value="rental">“We’re keeping it as a rental.”</option>
+            <option value="generic">General objections</option>
+        </select>
+
+        <button class="gen-btn" onclick="generateObjections()">Handle Objection</button>
+    </div>
+
+    <div id="output" class="output-box">
+        Click a button to generate scripts…
+    </div>
 </div>
 
 <script>
 /* ------------------ HOOK GENERATOR ------------------ */
-const hooks = [
-    "Hey this is Kevin with Ascend Realty… totally random question for you — are you still the owner of the home on ____?",
-    "Kevin here with Ascend Realty. Quick question… if the market quietly shifted in your favor, would you want to know?",
-    "This is Kevin at Ascend Realty. Not selling anything — just curious, how long have you owned the property?",
-    "Hey this is Kevin with Ascend. If someone offered the right price, would that change your plans at all?",
-    "Kevin calling with Ascend Realty. What’s your long-term plan for the property?",
-    "Ascend Realty here — Kevin speaking. If you knew your home's true buyer demand today, would that be useful?",
-    "Kevin from Ascend Realty. Do you know what the highest sale in your neighborhood was recently?"
-];
+function generateColdHooks() {
+    const hooks = [
+        "Hey, this is Kevin with Ascend Realty. Quick question, would you be open to hearing how much buyers are paying in your neighborhood lately?",
+        "Kevin here with Ascend Realty. Do you follow the real estate activity around your street at all?",
+        "This is Kevin at Ascend Realty. If there was a strong shift in demand on your block, would that be something you’d want a heads-up on?",
+        "Kevin with Ascend Realty checking in. Are you familiar with what your home would realistically attract today?",
+        "If your equity jumped more than you expected, would you want to know? This is Kevin with Ascend Realty.",
+        "This is Kevin over at Ascend Realty. When’s the last time someone gave you a true local update, not the Zillow nonsense?",
+        "Hey it's Kevin with Ascend Realty. I’m helping track activity in your area… mind if I ask when you bought the home?",
+        "Kevin here. Not selling call. Just curious, have you reviewed what homes *like yours* are quietly trading for?",
+        "If the market gave you leverage again, would you at least want the option? This is Kevin at Ascend Realty.",
+        "This is Kevin with Ascend Realty. When’s the last time you checked in on your current home's value?",
+        "Hey there, Kevin from Ascend Realty. Random question, are you planning on staying put long-term or keeping options open?",
+        "Kevin with Ascend Realty here. Do you track what’s selling around you or is that not really your thing?",
+        "If someone made an offer you weren’t expecting, would you want to hear it? This is Kevin at Ascend Realty.",
+        "Kevin here. Do you prefer brief updates or only when prices swing noticeably?",
+        "Ascend Realty checking in. Ever wonder what your place would pull in today’s market?",
+        "Hey, Kevin with Ascend Realty. No pitch. Just asking, do you follow the local market at all?",
+        "If the perfect price landed in your lap, what would you do? Kevin with Ascend Realty.",
+        "Kevin here. Do you like staying updated on home values or only if something major changes?",
+        "Ascend Realty quick check-in. Any plans for the home over the next few years?",
+        "Kevin with Ascend Realty. I’m tracking a few buyers looking nearby… would you want to know if one matched your home?"
+    ];
 
-function generateHook() {
-    document.getElementById("hookText").innerText =
-        hooks[Math.floor(Math.random() * hooks.length)];
+    let output = hooks.map(h => "• " + h).join("\n\n");
+    document.getElementById("output").textContent = output;
+}
+
+/* --------------------------- Warm Buyer Follow-Up -------------------------- */
+function generateWarmHooks() {
+    const warm = [
+        "Hey, this is Kevin with Ascend Realty. I saw you checked out some homes on our site and wanted to see what caught your eye.",
+        "Kevin here at Ascend Realty. Were you browsing casually or actively looking for something in the next few months?",
+        "Saw you saved a property recently. What stood out about it to you?",
+        "Are you leaning toward new construction, existing homes, or just feeling things out still?",
+        "Any deal-breakers you want me to keep off your radar so I don't send you stuff you hate?",
+        "Is this your first time buying or have you been through it before?",
+        "Are you looking for something move-in ready or something you can add equity to?",
+        "If the right home popped up this week, would you want me to notify you fast?",
+        "How soon are you hoping to be in something once you find the right home?",
+        "Do you have a price range you're comfortable with or still exploring options?",
+        "Any neighborhoods you love or want to avoid?",
+        "Are schools important or not really part of the search?",
+        "Do you currently rent or own?",
+        "Is there a particular style of home that feels right to you?",
+        "Are you looking for a place with a garage, big yard, or something low-maintenance?",
+        "Is timing flexible or are you aiming for a specific month?",
+        "Do you already have a lender in mind or want me to connect you with someone local?",
+        "How soon do you want to start viewing places in person?",
+        "What would make this process feel smooth and stress-free for you?",
+        "Big picture, what's motivating the move right now?"
+    ];
+
+    let output = warm.map(h => "• " + h).join("\n\n");
+    document.getElementById("output").textContent = output;
+}
+
+/* ------------------------------ Objection Handler ------------------------------ */
+function generateObjections() {
+    const type = document.getElementById("objectionSelect").value;
+    const responses = {
+        notSelling: [
+            "Totally fair. Most people I talk to aren’t selling right now. I’m just giving quick market updates so you always know where you stand.",
+            "No problem at all. If the market shifted in your favor, would a quick update still be useful?",
+            "Staying put is great. Out of curiosity, how long do you plan to be in the home?",
+            "Makes sense. When’s the last time anyone gave you a true valuation?",
+            "Absolutely. Even if you're not selling, equity updates can help long-term planning. Want one?"
+        ],
+        haveAgent: [
+            "That’s awesome, sticking with someone you trust matters. When did they last update you on your home value?",
+            "Makes sense. I’m not trying to replace them, just offering a quick local update.",
+            "Perfect. I’ll keep this simple then, want a brief snapshot of the activity happening around your block?",
+            "Totally. Good agents like getting informed clients anyway.",
+            "No issue. Were you able to get any recent comparable sales from them?"
+        ],
+        spring: [
+            "Spring is popular. Are you prepping anything in the home before then?",
+            "That’s a great timeline. Want updates between now and then so you know what pricing looks like?",
+            "Smart choice. Are you staying in the area after the move?",
+            "Makes sense. Are you aiming for early or late spring?",
+            "Totally fair. Would a quick equity update help with planning?"
+        ],
+        justLooking: [
+            "Nothing wrong with that. Anything specific catch your eye recently?",
+            "Just browsing is where a lot of our buyers start. What types of homes interest you?",
+            "Cool. Are you local or browsing from out of town?",
+            "Nice. Are you checking price trends or just seeing what's out there?",
+            "Got it. Want me to send you only the really good stuff?"
+        ],
+        notInterested: [
+            "No problem. Before I hop off, when’s the last time someone updated you on your home’s value?",
+            "Totally fine. Out of curiosity, how long have you lived in the home?",
+            "Got it. If the market changed aggressively in your favor, would you want to know?",
+            "Fair enough. Are you planning to stay long-term or unsure?",
+            "Alright. If anything big shifts locally, want a single message update?"
+        ],
+        stopCalling: [
+            "Absolutely, I won’t bug you. Just to confirm, if anything big changes near your property, should I notify you or no?",
+            "Understood completely. I’ll remove you. Before I do, are you the right contact for this address?",
+            "No problem. Just curious, are you holding long-term?",
+            "Totally fair. Respecting time is important. Removing you now.",
+            "Got it. If you ever need anything real-estate related, we're here."
+        ],
+        rental: [
+            "Rentals are a great strategy. How long do you plan to hold it?",
+            "Makes sense. Do you track rental value vs equity growth?",
+            "Nice, rentals do well here. Are you thinking long-term hold or mid-term?",
+            "Good call. Want a quick idea of what it would sell for anyway?",
+            "Totally. Do you manage it yourself or use a service?"
+        ],
+        generic: [
+            "Totally get it. What’s your long-term plan with the property?",
+            "Makes sense. When’s the last time you checked equity?",
+            "Understandable. If the market flipped in your favor, want to know?",
+            "No worries. Are you staying put long-term?",
+            "Fair. Anything you'd change about the home if you stayed another 5 years?"
+        ]
+    };
+
+    let output = responses[type].map(r => "• " + r).join("\n\n");
+    document.getElementById("output").textContent = output;
 }
 
 /* ------------------ LIVE BACKEND CONNECTION ------------------ */
@@ -352,7 +512,6 @@ async function refreshData() {
         const remaining = data.remainingHours || (20 - week);
         const isClockedIn = data.isClockedIn;
 
-        /* ----------------- Update Text ----------------- */
         document.getElementById("hoursToday").innerText =
             "Today's Hours: " + today.toFixed(2);
 
@@ -362,7 +521,6 @@ async function refreshData() {
         document.getElementById("remainingHours").innerText =
             "Remaining This Week: " + remaining.toFixed(2) + " hrs";
 
-        /* ----------------- Progress bar ----------------- */
         let percent = Math.min((week / 20) * 100, 100);
         const bar = document.getElementById("weeklyProgress");
         bar.style.width = percent + "%";
@@ -373,7 +531,6 @@ async function refreshData() {
         else if (percent < 90) bar.classList.add("yellow");
         else bar.classList.add("red");
 
-        /* ----------------- Clock-in status ----------------- */
         if (isClockedIn) {
             document.getElementById("statusBanner").style.display = "block";
             document.getElementById("clockedTime").style.display = "block";
@@ -405,11 +562,9 @@ async function refreshData() {
     }
 }
 
-/* auto-refresh every 15 seconds */
 refreshData();
 setInterval(refreshData, 15000);
 
-/* ------------------ CLOCK EVENTS ------------------ */
 document.getElementById("clockInBtn").onclick = async () => {
     await fetch(API_URL + "?event=Clock+In", { method: "POST" });
     refreshData();
