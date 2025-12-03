@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ascend ISA Dashboard</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: #f4f7fb;
+        color: #1e2a36;
+    }
+
+    .header {
+        text-align: center;
+        padding: 60px 20px 50px;
+        background: linear-gradient(180deg, #e7eef7 0%, #f5f8fc 100%);
+        border-bottom: 1px solid #d9e1ec;
+    }
+
+    .logo {
+        width: 240px;
+        margin-bottom: 12px;
+    }
+
+    h1 {
+        font-size: 42px;
+        margin: 10px 0 5px;
+        font-weight: 700;
+    }
+
+    .subtext {
+        font-size: 18px;
+        color: #526578;
+        margin-bottom: 40px;
+    }
+
+    /* -----------------------------------------
+       ASCEND WORK HUB
+    ----------------------------------------- */
+    .workhub {
+        max-width: 900px;
+        margin: -20px auto 40px;
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 10px 28px rgba(0,0,0,0.12);
+        border: 1px solid #e3e8ef;
+    }
+
+    .workhub h2 {
+        margin-top: 0;
+        font-size: 26px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+    .status-banner {
+        display: none;
+        background: #1b4b67;
+        color: white;
+        padding: 14px;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 17px;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    .clocked-time {
+        display: none;
+        text-align: center;
+        font-size: 15px;
+        color: #30475e;
+        margin-bottom: 20px;
+        margin-top: -10px;
+        font-weight: 600;
+    }
+
+    .clock-btns {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .clock-btn {
+        flex: 1;
+        padding: 14px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s;
+        color: white;
+    }
+
+    .clock-in {
+        background: #15384a;
+    }
+    .clock-in:hover { background: #1f4d67; }
+
+    .clock-out {
+        background: #b02a2a;
+    }
+    .clock-out:hover { background: #c03a3a; }
+
+    .disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .stats-box {
+        text-align: center;
+        font-size: 17px;
+        font-weight: 600;
+        margin-top: 10px;
+        color: #2f3f50;
+    }
+
+    .secondary {
+        font-size: 14px;
+        color: #556475;
+        margin-top: 5px;
+        font-weight: 500;
+    }
+
+    .progress-bar-bg {
+        width: 100%;
+        background: #e6edf5;
+        height: 18px;
+        border-radius: 10px;
+        margin-top: 15px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        width: 0%;
+        transition: width 0.4s ease;
+    }
+
+    /* Color thresholds */
+    .green { background: #28a745; }
+    .yellow { background: #ffc107; }
+    .red { background: #dc3545; }
+
+    /* -----------------------------------------
+       TABS
+    ----------------------------------------- */
+    .tabs {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 14px 0;
+        background: white;
+        max-width: 900px;
+        margin: 0 auto 40px;
+        border-radius: 14px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .tabs a {
+        text-decoration: none;
+        color: #1e2a36;
+        font-weight: 600;
+        padding: 8px 18px;
+        border-radius: 10px;
+    }
+
+    .tabs a:hover {
+        background: #dfe7f0;
+    }
+
+    /* -----------------------------------------
+       AGENT CARDS
+    ----------------------------------------- */
+    .agent-container {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        padding: 0 20px;
+        margin-bottom: 50px;
+    }
+
+    .agent-card {
+        background: white;
+        border-radius: 18px;
+        width: 290px;
+        padding: 26px;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .agent-card h2 {
+        margin-top: 0;
+        font-size: 22px;
+        font-weight: 700;
+    }
+
+    .btn {
+        display: block;
+        margin: 10px auto;
+        background: #2b4a5a;
+        color: white;
+        border: none;
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        font-size: 15px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .btn:hover { background: #3b6173; }
+
+    /* -----------------------------------------
+       HOOK GENERATOR
+    ----------------------------------------- */
+    .generator {
+        background: white;
+        max-width: 900px;
+        margin: 0 auto 60px;
+        padding: 30px;
+        border-radius: 18px;
+        box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+    }
+
+    .generator h3 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    #hookText {
+        font-size: 18px;
+        margin: 20px 0;
+        font-weight: 500;
+        color: #1e2a36;
+    }
+
+    .gen-btn {
+        background: #15384a;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+    .gen-btn:hover { background: #1f4d67; }
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <img src="Ascend_Horiz_Logo.png" class="logo">
+    <h1>Hi, Kevin</h1>
+    <div class="subtext">Every dial is a doorway to an opportunity.</div>
+</div>
+
+<!-- ASCEND WORK HUB -->
+<div class="workhub">
+    <h2>Ascend Work Hub</h2>
+
+    <div id="statusBanner" class="status-banner">YOU ARE CLOCKED IN</div>
+    <div id="clockedTime" class="clocked-time"></div>
+
+    <div class="clock-btns">
+        <button id="clockInBtn" class="clock-btn clock-in">Clock In</button>
+        <button id="clockOutBtn" class="clock-btn clock-out disabled" disabled>Clock Out</button>
+    </div>
+
+    <div class="stats-box">
+        <div id="hoursToday">Today's Hours: 0.00</div>
+        <div id="weekHours" class="secondary">This Week: 0.00 / 20 hrs</div>
+        <div id="remainingHours" class="secondary"></div>
+    </div>
+
+    <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="weeklyProgress"></div>
+    </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+    <a href="https://batchleads.io" target="_blank">BatchLeads</a>
+    <a href="https://docs.google.com/spreadsheets" target="_blank">Google Sheets</a>
+</div>
+
+<!-- AGENT CARDS -->
+<div class="agent-container">
+    <div class="agent-card">
+        <h2>Mike Frybarger</h2>
+        <button class="btn">Calendly (coming soon)</button>
+        <button class="btn">Homebot Seller (coming soon)</button>
+    </div>
+
+    <div class="agent-card">
+        <h2>Henry Ulrich</h2>
+        <a href="https://calendly.com/henryroy" target="_blank"><button class="btn">Schedule w/ Henry</button></a>
+        <a href="https://hmbt.co/fUNkbh" target="_blank"><button class="btn">Homebot Seller</button></a>
+    </div>
+
+    <div class="agent-card">
+        <h2>Megan Dickerson</h2>
+        <a href="https://calendly.com/megandickerson-realestate" target="_blank"><button class="btn">Schedule w/ Megan</button></a>
+        <a href="https://get.homebot.ai/?id=14257442-1eec-49ec-b010-21fb01435f4b" target="_blank"><button class="btn">Homebot Seller</button></a>
+    </div>
+</div>
+
+<!-- HOOK GENERATOR -->
+<div class="generator">
+    <h3>Cold Call Hook Generator</h3>
+    <div id="hookText">Click the button to generate a hook!</div>
+    <button class="gen-btn" onclick="generateHook()">New Hook</button>
+</div>
+
+<script>
+/* ------------------ HOOK GENERATOR ------------------ */
+const hooks = [
+    "Hey this is Kevin with Ascend Realty… totally random question for you — are you still the owner of the home on ____?",
+    "Kevin here with Ascend Realty. Quick question… if the market quietly shifted in your favor, would you want to know?",
+    "This is Kevin at Ascend Realty. Not selling anything — just curious, how long have you owned the property?",
+    "Hey this is Kevin with Ascend. If someone offered the right price, would that change your plans at all?",
+    "Kevin calling with Ascend Realty. What’s your long-term plan for the property?",
+    "Ascend Realty here — Kevin speaking. If you knew your home's true buyer demand today, would that be useful?",
+    "Kevin from Ascend Realty. Do you know what the highest sale in your neighborhood was recently?"
+];
+
+function generateHook() {
+    document.getElementById("hookText").innerText =
+        hooks[Math.floor(Math.random() * hooks.length)];
+}
+
+/* ------------------ LIVE BACKEND CONNECTION ------------------ */
+const API_URL = "https://script.google.com/macros/s/AKfycbx-DytkJmSuYb-yuqkxvHjTJQbcpVkZzFhfjKvTqM0XnuRAgyE4tY2URYWrU9q9UTub/exec";
+
+async function refreshData() {
+    try {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+
+        const today = data.todayHours || 0;
+        const week = data.weekHours || 0;
+        const remaining = data.remainingHours || (20 - week);
+        const isClockedIn = data.isClockedIn;
+
+        /* ----------------- Update Text ----------------- */
+        document.getElementById("hoursToday").innerText =
+            "Today's Hours: " + today.toFixed(2);
+
+        document.getElementById("weekHours").innerText =
+            "This Week: " + week.toFixed(2) + " / 20 hrs";
+
+        document.getElementById("remainingHours").innerText =
+            "Remaining This Week: " + remaining.toFixed(2) + " hrs";
+
+        /* ----------------- Progress bar ----------------- */
+        let percent = Math.min((week / 20) * 100, 100);
+        const bar = document.getElementById("weeklyProgress");
+        bar.style.width = percent + "%";
+
+        bar.classList.remove("green", "yellow", "red");
+
+        if (percent < 50) bar.classList.add("green");
+        else if (percent < 90) bar.classList.add("yellow");
+        else bar.classList.add("red");
+
+        /* ----------------- Clock-in status ----------------- */
+        if (isClockedIn) {
+            document.getElementById("statusBanner").style.display = "block";
+            document.getElementById("clockedTime").style.display = "block";
+
+            const now = new Date();
+            const timeString = now.toLocaleTimeString([], {hour: "numeric", minute: "2-digit"});
+            document.getElementById("clockedTime").innerText =
+                "Clocked in at " + timeString;
+
+            document.getElementById("clockInBtn").disabled = true;
+            document.getElementById("clockInBtn").classList.add("disabled");
+
+            document.getElementById("clockOutBtn").disabled = false;
+            document.getElementById("clockOutBtn").classList.remove("disabled");
+        } 
+        else {
+            document.getElementById("statusBanner").style.display = "none";
+            document.getElementById("clockedTime").style.display = "none";
+
+            document.getElementById("clockOutBtn").disabled = true;
+            document.getElementById("clockOutBtn").classList.add("disabled");
+
+            document.getElementById("clockInBtn").disabled = false;
+            document.getElementById("clockInBtn").classList.remove("disabled");
+        }
+
+    } catch (err) {
+        console.error("Error pulling live data:", err);
+    }
+}
+
+/* auto-refresh every 15 seconds */
+refreshData();
+setInterval(refreshData, 15000);
+
+/* ------------------ CLOCK EVENTS ------------------ */
+document.getElementById("clockInBtn").onclick = async () => {
+    await fetch(API_URL + "?event=Clock+In", { method: "POST" });
+    refreshData();
+};
+
+document.getElementById("clockOutBtn").onclick = async () => {
+    await fetch(API_URL + "?event=Clock+Out", { method: "POST" });
+    refreshData();
+};
+</script>
+
+</body>
+</html>
